@@ -1,0 +1,77 @@
+:root {
+    --background: #acb0e0;
+    --border: rgb(16, 11, 29);
+    --cardBackground: #8c85b1;
+    --textColor: #ebeafd;
+    --button: #744444;
+    --buttonHover: rgb(124, 124, 124);
+    --shadow: rgb(56, 20, 20);
+    --titlebackground: #374270;
+    --border-radius: 0.3rem;
+}
+
+.pageStyle {
+    background-color: var(--background);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.headerStyle {
+    padding: 3% 4%;
+    background-color: var(--titlebackground);
+    color: var(--textColor);
+}
+
+.weaterDashboardTitle {
+    font-size: 3rem;
+    background-color: var(--cardBackground);
+    color: var(--textColor);
+    padding: 0 10px;
+    display: inline-block;
+    border-radius: var(--border-radius);
+    box-shadow: 6px 5px var(--shadow);
+}
+
+.titleDescription {
+    color: var(--textColor);
+    font-size: 1.2rem;
+    
+}
+
+.mainStyle {
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+.userCard {
+    background-color: var(--cardBackground);
+    border: 3px solid var(--border);
+    border-radius: var(--border-radius);
+    color: var(--textColor);
+    margin: 5px 0 15px 0;
+    text-align: center;
+}
+
+.btn {
+    font-size: 1.3rem;
+    text-decoration: none;
+    padding: 6px 5px;
+    display: block;
+    width: 80%;
+    margin: 0px auto 5px auto;
+    border-radius: var(--border-radius);
+    color: var(--textColor);
+    border: none;
+    outline: none;
+    background-color: var(--button);
+    box-shadow: 3px 3px var(--shadow);
+    transform: translate(-1px, -1px);
+  }
+
+  .btn:hover {
+    color: var(--textColor);
+    background-color: var(--buttonHover);
+    transform: translate(0, 0);
+    box-shadow: 2px 2px var(--shadow);
+  }
