@@ -42,8 +42,13 @@
 .mainStyle {
     display: flex;
     flex-wrap: wrap;
-    
 }
+
+.form-label {
+    display: block;
+    margin: 5px;
+}
+
 .userCard {
     background-color: var(--cardBackground);
     border: 3px solid var(--border);
@@ -51,6 +56,10 @@
     color: var(--textColor);
     margin: 5px 0 15px 0;
     text-align: center;
+}
+
+#submitBtn {
+    margin-top: 10px;
 }
 
 .btn {

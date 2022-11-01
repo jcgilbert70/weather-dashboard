@@ -1,4 +1,6 @@
-var locationInputEl = $('#locationInput');
+var cityInputEl = $('#cityInput');
+var stateInputEl = $('#stateInput');
+var countryInputEl = $('#countryInput');
 var locationSearchedEl = $('#locationSearched');
 var apiKey = "";
 
@@ -15,9 +17,9 @@ var inputSumbitHandler = function (event) {
     console.log("input submit handler function started")
 
 
-    var searchedLocation = locationInputEl.value().trim();
-    console.log("searched location is: " + searchedLocation);
-    if (searchedLocation) {
+    var searchedCity = cityInputEl.value().trim();
+    console.log("searched location is: " + searchedCity);
+    if (searchedCity) {
         getWeather(searchedLocation);
 
         locationSearchedEl.textContent = '';
@@ -60,7 +62,7 @@ function renderHistory() {
 // have function run on form submit
 var getWeather = function (locationName) {
     console.log("get weather function started")
-    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + locationName + "&appid=" + apiKey;
+    var apiUrl = "api.openweathermap.org/data/2.5/forecast?q=" + cityName + "," + stateName + "," + countryName + "&appid=" + apiKey;
 
     fetch(apiUrl)
         .then(function (response) {
