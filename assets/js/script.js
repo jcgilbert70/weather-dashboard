@@ -1,6 +1,4 @@
 var locations = [];
-var searchHistory = $('#searchHistory');
-
 var city = "Chicago"
 var key = "c4a9e8715d261e0f1a0290347bef37d8";
 
@@ -15,7 +13,7 @@ function init() {
     }
 
 
-    // renderHistory();
+    renderHistory();
 }
 
 
@@ -30,12 +28,13 @@ $("#submitBtn").on("click", function (event) {
     }
     console.log("searched city is: " + searchedCity);
 
+    // currently saving duplicates, look into stopping that
     locations.push(searchedCity);
 
 
 
     storedHistory();
-    //renderHistory();
+    renderHistory();
 
 });
 
@@ -53,27 +52,29 @@ function storedHistory() {
 
 
 
-/*
-// display cities previously searched, pull from local storage
+
+// display cities previously searched under seach history heading, pull from local storage
 function renderHistory() {
     console.log("render history function started")
 
-    locationSearchedEl.empty();
+    $('#searchHistory').empty(); // clears the search history list to re-write with now-stored data
 
     for (var i = 0; i < locations.length; i++) {
         var location = locations[i];
 
         var li = $("<li>").text(location);
         li.attr('type', 'button');
+        console.log(li);
+        $('#searchHistory').prepend(li);
 
     } if (location) {
-        getWeather(location)
+        //getWeather(location)
 
     } else {
         return
     };
 }
-*/
+
 
 
 // create new element to display each search history
