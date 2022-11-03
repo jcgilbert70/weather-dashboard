@@ -1,15 +1,20 @@
 var locations = [];
 var cityInputEl = $('#cityInput');
-var stateInputEl = $('#stateInput');
-var countryInputEl = $('#countryInput');
 var locationSearchedEl = $('#locationSearched');
 var apiKey = "c4a9e8715d261e0f1a0290347bef37d8";
 
 function init() {
     console.log("initilize function started")
+    // get any stored locations
+    var storedLocations = JSON.parse(localStorage.getItem("locations"));
+
+    if (storedLocations !== null) { // if stored locations is not empty, display in locations array
+        locations = storedLocations;
+        console.log(locations)
+    }
 
 
-    renderHistory() // display any stored history when initialized
+    renderHistory(); // after collecting array from local storage, run render function
 }
 
 
@@ -22,16 +27,14 @@ var inputSumbitHandler = function (event) {
 
 
     var searchedCity = cityInputEl.value().trim();
-    var searchedState = stateInputEl.value().trim();
-    var searchedCountry = countryInputEl.value().trim();
-    console.log("searched location is: " + searchedCity + ", " + searchedState + ", " + searchedCountry);
-    if (searchedCity) {
-        getWeather(searchedCity, searchedState, searchedCountry);
+
+    console.log("searched city is: " + searchedCity);
+    if (searchedCity) {  // if searched city has an input, run get weather function, bringing 
+        getWeather(searchedCity);
 
         locationSearchedEl.textContent = '';  // clears previous 5 day forceast
         cityInputEl.value = '';  // clears city input area
-        stateInputEl.value = '';  //  clears state input area
-        countryInputEl.value = '';  // clears country input area
+
     } else {
         alert('Please enter a location to search for weather forcast')
     }
@@ -57,16 +60,26 @@ function storedHistory() {
 // display cities previously searched, pull from local storage
 function renderHistory() {
     console.log("render history function started")
-for (var i = 0; i < locations.length; i++) {
-    var location = locations[i]; 
+
+    locationSearchedEl.empty();
+
+    for (var i = 0; i < locations.length; i++) {
+        var location = locations[i];
+
+        var li = $("<li>").text(location);
+        li.attr('type', 'button');
+
+    } if (location) {
+        getWeather(location)
+
+    } else {
+        return
+    };
 }
 
 
-    // create new element to display each search history
 
-
-
-}
+// create new element to display each search history
 
 
 
