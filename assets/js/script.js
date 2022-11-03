@@ -1,8 +1,9 @@
+var locations = [];
 var cityInputEl = $('#cityInput');
 var stateInputEl = $('#stateInput');
 var countryInputEl = $('#countryInput');
 var locationSearchedEl = $('#locationSearched');
-var apiKey = "";
+var apiKey = "c4a9e8715d261e0f1a0290347bef37d8";
 
 function init() {
     console.log("initilize function started")
@@ -12,18 +13,25 @@ function init() {
 }
 
 
+
+
+
 var inputSumbitHandler = function (event) {
     event.preventDefault();
     console.log("input submit handler function started")
 
 
     var searchedCity = cityInputEl.value().trim();
-    console.log("searched location is: " + searchedCity);
+    var searchedState = stateInputEl.value().trim();
+    var searchedCountry = countryInputEl.value().trim();
+    console.log("searched location is: " + searchedCity + ", " + searchedState + ", " + searchedCountry);
     if (searchedCity) {
-        getWeather(searchedLocation);
+        getWeather(searchedCity, searchedState, searchedCountry);
 
-        locationSearchedEl.textContent = '';
-        locationInputEl.value = '';
+        locationSearchedEl.textContent = '';  // clears previous 5 day forceast
+        cityInputEl.value = '';  // clears city input area
+        stateInputEl.value = '';  //  clears state input area
+        countryInputEl.value = '';  // clears country input area
     } else {
         alert('Please enter a location to search for weather forcast')
     }
@@ -31,12 +39,17 @@ var inputSumbitHandler = function (event) {
 
 
 
+
+
+
 // store searched history in local storage
 function storedHistory() {
     console.log("stored history function started")
-
+    localStorage.setItem("locations", JSON.stringify(locations))
 
 }
+
+
 
 
 
@@ -44,7 +57,9 @@ function storedHistory() {
 // display cities previously searched, pull from local storage
 function renderHistory() {
     console.log("render history function started")
-
+for (var i = 0; i < locations.length; i++) {
+    var location = locations[i]; 
+}
 
 
     // create new element to display each search history
@@ -60,7 +75,7 @@ function renderHistory() {
 
 
 // have function run on form submit
-var getWeather = function (locationName) {
+var getWeather = function () {
     console.log("get weather function started")
     var apiUrl = "api.openweathermap.org/data/2.5/forecast?q=" + cityName + "," + stateName + "," + countryName + "&appid=" + apiKey;
 
@@ -74,10 +89,13 @@ var getWeather = function (locationName) {
                 alert('Error: ' + response.statusText);
             }
         })
-        .catch(function (error){
+        .catch(function (error) {
             alert('Unable to connect to OpenWeatherMap')
+
         })
+    console.log.apply(response)
 }
+
 
 
 
