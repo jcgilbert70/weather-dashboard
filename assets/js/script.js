@@ -1,5 +1,6 @@
 var locations = [];
 var city = "Chicago"
+var date = moment().format("dddd, MMMM Do YYYY");
 var key = "c4a9e8715d261e0f1a0290347bef37d8";
 
 function init() {
@@ -18,6 +19,7 @@ function init() {
 
 
 $("#submitBtn").on("click", function (event) {
+    console.log("get the weather button clicked")
     event.preventDefault();
 
     var searchedCity = $("#cityInput").val().toUpperCase().trim(); //grabs the text input saves it in all uppercase characters
@@ -45,7 +47,7 @@ $("#submitBtn").on("click", function (event) {
 function storedHistory() {
     console.log("stored history function started")
     localStorage.setItem("locations", JSON.stringify(locations))
-    console.log(locations)
+    console.log("list of all inputs in local storage: " + locations.join(", "))
 }
 
 
@@ -62,13 +64,12 @@ function renderHistory() {
     for (var i = 0; i < locations.length; i++) {
         var location = locations[i];
 
-        var li = $("<li>").text(location);
-        li.attr('type', 'button');
-        console.log(li);
+        var li = $("<li>").text(location); // adds a list item with locations name
+        li.attr('type', 'button');  // makes the created list item a button
         $('#searchHistory').prepend(li);
 
     } if (location) {
-        //getWeather(location)
+        getWeather(location) // run get Weather function on created button in search history on selected location
 
     } else {
         return
@@ -84,15 +85,19 @@ function renderHistory() {
 
 
 
-/*
+
 // have function run on form submit
-function getWeather() {
+function getWeather(city) {
     console.log("get weather function started")
+    console.log(city)
     var currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${key}`;
 
-    $(currentSearch).empty();
 
-    console.log(currentSearch)
+
+
+    $(".currentSearch").empty();
+
+    
 
     $.ajax({
         url: currentWeatherApi,
@@ -123,9 +128,9 @@ function getWeather() {
 
 
     })
-    getFiveDayForecast();
+    // getFiveDayForecast();
 }
-*/
+
 
 
 
@@ -200,6 +205,7 @@ function getFiveDayForecast() {
             }
         }
     });
+
 }
 */
 
