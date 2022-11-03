@@ -15,41 +15,40 @@ function init() {
     }
 
 
-   // renderHistory(); // after collecting array from local storage, run render function
+    // renderHistory();
 }
 
 
 $("#submitBtn").on("click", function (event) {
     event.preventDefault();
-  
-    // This line will grab the city from the input box
-    var searchedCity = $("#cityInput").val().trim();
 
-    
+    var searchedCity = $("#cityInput").val().toUpperCase().trim(); //grabs the text input saves it in all uppercase characters
 
-    // Return from function early if submitted city is blank
     if (searchedCity === "") {
         console.log("input for city was blank")
-      return;
+        return;
     }
     console.log("searched city is: " + searchedCity);
-    //Adding city-input to the city array
+
     locations.push(searchedCity);
+
+
+
+    storedHistory();
+    //renderHistory();
+
 });
 
 
 
 
-
-
-/*
 // store searched history in local storage
 function storedHistory() {
     console.log("stored history function started")
     localStorage.setItem("locations", JSON.stringify(locations))
-
+    console.log(locations)
 }
-*/
+
 
 
 
