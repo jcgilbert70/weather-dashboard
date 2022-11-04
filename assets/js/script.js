@@ -1,5 +1,5 @@
 var locations = [];
-var city = "Chicago"
+var city = "chicago"
 var date = moment().format("dddd, MMMM Do YYYY");
 var key = "c4a9e8715d261e0f1a0290347bef37d8";
 
@@ -36,8 +36,8 @@ $("#submitBtn").on("click", function (event) {
 
 
     storedHistory();
-    renderHistory();
-
+    getWeather(searchedCity);
+    getFiveDayForecast (searchedCity);
 });
 
 
@@ -48,6 +48,7 @@ function storedHistory() {
     console.log("stored history function started")
     localStorage.setItem("locations", JSON.stringify(locations))
     console.log("list of all inputs in local storage: " + locations.join(", "))
+    renderHistory();
 }
 
 
@@ -69,7 +70,8 @@ function renderHistory() {
         $('#searchHistory').prepend(li);
 
     } if (location) {
-        getWeather(location) // run get Weather function on created button in search history on selected location
+        
+         // run get Weather function on created button in search history on selected location
 
     } else {
         return
@@ -82,8 +84,12 @@ function renderHistory() {
 
 
 function renderWeather(weather) {
+    $('#currentSearch').empty(); // clears previous search before displaying new search
+
     console.log(weather);
+
     var weatherResults = $('#currentSearch');
+
     // create h2 for name
     var cityName = document.createElement("h2");
     cityName.textContent = weather.name;
@@ -91,7 +97,7 @@ function renderWeather(weather) {
 
     // create p for temp
     var temp = document.createElement("p");
-    temp.textContent = "Temp: " + weather.main.temp + " F";
+    temp.textContent = "Temp: " + weather.main.temp + " °F";
     weatherResults.append(temp)
 
     // create p for humidity
@@ -109,6 +115,7 @@ function renderWeather(weather) {
         description.textContent = weatherDetails.description;
         weatherResults.append(description);
     }
+    
 }
 
 
@@ -118,16 +125,31 @@ function renderWeather(weather) {
 function getWeather(city) {
     console.log("get weather function started")
     console.log("city that get weather function is fetching: " + city)
-    $('#currentSearch').empty();
+
+    
 
     var fetchWeather = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=' + key;
 
     fetch(fetchWeather)
         .then((response) => response.json())
         .then((data) => renderWeather(data))
+
 }
 
-getWeather();
+
+
+
+function getFiveDayForecast (city) {
+    console.log("get five day forecast function started")
+
+var fetchFiveDayForecast = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=1&appid=' + key;
+
+fetch(fetchFiveDayForecast)
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+
+
+}
 
 /* 
  var currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${key}`;
