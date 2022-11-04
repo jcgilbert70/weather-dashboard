@@ -81,7 +81,35 @@ function renderHistory() {
 // create new element to display each search history
 
 
+function renderWeather(weather) {
+    console.log(weather);
+    var weatherResults = $('#currentSearch');
+    // create h2 for name
+    var cityName = document.createElement("h2");
+    cityName.textContent = weather.name;
+    weatherResults.append(cityName);
 
+    // create p for temp
+    var temp = document.createElement("p");
+    temp.textContent = "Temp: " + weather.main.temp + " F";
+    weatherResults.append(temp)
+
+    // create p for humidity
+    var humidity = document.createElement("p");
+    humidity.textContent = "Humidity: " + weather.main.humidity + " %";
+    weatherResults.append(humidity)
+    // create p for wind
+    var wind = document.createElement("p");
+    wind.textContent = "Wind Speed: " + weather.wind.speed + " mph, " + weather.wind.deg + "°";
+    weatherResults.append(wind)
+
+    var weatherDetails = weather.weather[0]
+    if (weatherDetails && weatherDetails.description) {
+        var description = document.createElement("p");
+        description.textContent = weatherDetails.description;
+        weatherResults.append(description);
+    }
+}
 
 
 
@@ -89,61 +117,73 @@ function renderHistory() {
 // have function run on form submit
 function getWeather(city) {
     console.log("get weather function started")
-    console.log(city)
-    var currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${key}`;
+    console.log("city that get weather function is fetching: " + city)
+    $('#currentSearch').empty();
 
+    var fetchWeather = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=' + key;
 
-
-
-    $(".currentSearch").empty();
-
-    
-
-    $.ajax({
-        url: currentWeatherApi,
-        method: "GET"
-
-    }).then(function (response) {
-        $(".searhedCityName").text(response.name);
-        $(".searchedCurrentDate").text(date);
-        $(".icons").attr("src", `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
-
-        var currentTemperatureEl = $('<p>').text(`Feels Like: ${response.main.feels_like} °F`);
-        currentSearch.append(currentTemperatureEl);
-
-        var currentFeelsLikeTemperatureEl = $("<p>").text(`Feels Like: ${response.main.feels_like} °F`);
-        currentSearch.append(currentFeelsLikeTemperatureEl);
-
-        var currentHumidityEl = $("<p>").text(`Humidity: ${response.main.humidity} %`);
-        currentSearch.append(currentHumidityEl);
-
-
-
-
-        var searchLon = response.coord.lon;
-        console.log(searchLon);
-        var searchLat = response.coord.lat;
-        console.log(searchLat);
-
-
-
-    })
-    // getFiveDayForecast();
+    fetch(fetchWeather)
+        .then((response) => response.json())
+        .then((data) => renderWeather(data))
 }
 
+getWeather();
+
+/* 
+ var currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${key}`;
+ 
+ 
+ 
+ 
+ $(".currentSearch").empty();
+ 
+ 
+ 
+ $.ajax({
+     url: currentWeatherApi,
+     method: "GET"
+ 
+ }).then(function (response) {
+     $(".searhedCityName").text(response.name);
+     $(".searchedCurrentDate").text(date);
+     $(".icons").attr("src", `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
+ 
+     var currentTemperatureEl = $('<p>').text(`Feels Like: ${response.main.feels_like} °F`);
+     currentSearch.append(currentTemperatureEl);
+ 
+     var currentFeelsLikeTemperatureEl = $("<p>").text(`Feels Like: ${response.main.feels_like} °F`);
+     currentSearch.append(currentFeelsLikeTemperatureEl);
+ 
+     var currentHumidityEl = $("<p>").text(`Humidity: ${response.main.humidity} %`);
+     currentSearch.append(currentHumidityEl);
+ 
+ 
+ 
+ 
+     var searchLon = response.coord.lon;
+     console.log(searchLon);
+     var searchLat = response.coord.lat;
+     console.log(searchLat);
+ 
+ 
+ 
+ })
+ // getFiveDayForecast();
+}
+*/
 
 
 
 /*
 function getFiveDayForecast() {
     var fiveDayForecastApi = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${key}`;
-
+ 
     $.ajax({
         url: fiveDayForecastApi,
         method: "GET"
-
+ 
     }).then(function (response) {
-
+ 
         $("#fiveDayForecast").empty();
         console.log(response);
         for (var i = 0, j = 0; j <= 5; i = i + 6) {
@@ -185,7 +225,7 @@ function getFiveDayForecast() {
                         "https://img.icons8.com/color/48/000000/rain.png"
                     );
                 }
-
+ 
                 var pTemperatureK = response5day.list[i].main.temp;
                 console.log(skyconditions);
                 var TempetureToNum = parseInt((pTemperatureK * 9) / 5 - 459);
@@ -205,7 +245,7 @@ function getFiveDayForecast() {
             }
         }
     });
-
+ 
 }
 */
 
@@ -216,4 +256,3 @@ function getFiveDayForecast() {
 // will need button click function for created location history buttons
 
 init()
-
