@@ -68,7 +68,7 @@
     padding: 6px 5px;
     display: block;
     width: 80%;
-    margin: 0px auto 5px auto;
+    margin: 5px auto 5px auto;
     border-radius: var(--border-radius);
     color: var(--textColor);
     border: none;

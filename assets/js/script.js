@@ -11,19 +11,16 @@ function init() {
 
     if (storedLocations !== null) { // if stored locations is not empty, display in locations array
         locations = storedLocations;
-        console.log(locations)
+        console.log("all locations in local storage: " + locations)
     }
-
-
-    removeDuplicates();
+    removeDuplicates(); // starts function to display local storage history, but runs function to remove duplicates first
 }
 
 
 $("#submitBtn").on("click", function (event) {
     console.log("get the weather button clicked")
-    $('#cityInput').empty();
     event.preventDefault();
-    
+
     var searchedCity = $("#cityInput").val().toUpperCase().trim(); //grabs the text input saves it in all uppercase characters
 
     if (searchedCity === "") {
@@ -31,13 +28,14 @@ $("#submitBtn").on("click", function (event) {
         return;
     }
     console.log("searched city is: " + searchedCity);
-
-    // currently saving duplicates, look into stopping that
     locations.push(searchedCity);
+
+
 
     storedHistory();
     getWeather(searchedCity);
     getFiveDayForecast(searchedCity);
+
 });
 
 
@@ -52,11 +50,11 @@ function storedHistory() {
 
 function removeDuplicates() {
     console.log("remove duplicates from history function started")
-    console.log(locations)
     for (i = 0; i < locations.length; i++) {
         if (unique.indexOf(locations[i]) === -1) {
             unique.push(locations[i]);
         }
+        console.log("list of only unique cities: " + unique)
     }
     renderHistory();
 }
@@ -67,10 +65,10 @@ function removeDuplicates() {
 function renderHistory() {
     console.log("render history function started")
     $('#searchHistory').empty(); // clears the search history list to re-write with now-stored data
-    
+
     for (var i = 0; i < unique.length; i++) {
         var location = unique[i];
-        
+
 
         var li = $("<li>").text(location); // adds a list item with locations name
         li.attr('type', 'button');  // makes the created list item a button
@@ -79,7 +77,15 @@ function renderHistory() {
         $('#searchHistory').prepend(li);
     };
 
-
+    //$('#historyBtn').on("click", function (event) {
+    //console.log("search history button pressed")
+    //event.preventDefault();
+    $(document).on("click", "#historyBtn", function (event) {
+        event.preventDefault();
+        city = $(this).text();
+        getWeather(city);
+        getFiveDayForecast(city);
+    });
 }
 
 
@@ -134,6 +140,7 @@ function renderFiveDayForecast(forecast) {
 
     var fiveDayForecast = $('#fiveDayForecast');
     $('#fiveDayForecast').empty();
+    console.log("data from five day forecast fetch next line")
     console.log(fiveDayArray)
     // create 5 day forecast cards
 
@@ -148,7 +155,6 @@ function renderFiveDayForecast(forecast) {
             feels_like: value.main.feels_like,
             humidity: value.main.humidity
         };
-        console.log(value.dt_txt);
 
         if (value.dt_txt.split(" ")[1] === "12:00:00") { // only takes noon temp to push into stock card
             myForecast.push(stock);
@@ -192,8 +198,8 @@ function renderFiveDayForecast(forecast) {
 
 
 function locateFiveDayForecast(coordinates) {
-    console.log("beginning five day forecast rendering function")
-    console.log(coordinates);
+    console.log("beginning five day forecast location function")
+    console.log("coordinates data from fetch: " + coordinates);
 
     var cityLat = coordinates[0].lat;
     var cityLon = coordinates[0].lon;
@@ -211,6 +217,7 @@ function locateFiveDayForecast(coordinates) {
 
 function getFiveDayForecast(city) {
     console.log("get five day forecast function started")
+    console.log("the city that get five day forecast function is fetching: " + city)
 
     var fetchFiveDayForecast = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=1&units=imperial&appid=' + key;
 
@@ -224,7 +231,7 @@ function getFiveDayForecast(city) {
 // have function run on form submit
 function getWeather(city) {
     console.log("get weather function started")
-    console.log("city that get weather function is fetching: " + city)
+    console.log("the city that get weather function is fetching: " + city)
 
 
 
@@ -237,13 +244,6 @@ function getWeather(city) {
 
 
 
-$('#historyBtn').on("click", function (event) {
-    console.log("search history button pressed")
-    event.preventDefault();
-    city = $(this).text();
-    console.log(city)
-    getWeather(city);
-    getFiveDayForecast(city);
-});
+
 
 init()
