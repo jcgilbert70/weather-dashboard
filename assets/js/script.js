@@ -114,58 +114,64 @@ function renderWeather(weather) {
 
 function renderFiveDayForecast(forecast) {
     console.log(forecast)
-    var fiveDayArray = forecast.list;
     var myForecast = [];
+    var fiveDayArray = forecast.list;
     var fiveDayForecast = $('#fiveDayForecast');
     $('#fiveDayForecast').empty();
     console.log(fiveDayArray)
     // create 5 day forecast cards
 
     $.each(fiveDayArray, function (index, value) {
-        
+
         stock = {
-            date: value.dt_txt.split(" ")[0],
+            date: value.dt_txt,
             temp: value.main.temp,
             feels_like: value.main.feels_like,
             humidity: value.main.humidity
         };
+        console.log(value.dt_txt);
 
         if (value.dt_txt.split(" ")[1] === "12:00:00") { // only takes noon temp to push into stock card
             myForecast.push(stock);
-            
+
             console.log(myForecast);
-        }
-
-        //populate each forecast card
-        for (let i = 0; i < myForecast.length; i++) {
-            var forecastCard = $("<div>");
-            forecastCard.attr("class", "card text-white bg-primary mb-3 cardOne");
-            forecastCard.attr("style", "max-width: 200px;");
-            fiveDayForecast.append(forecastCard);
-
-            var forecastHeader = $("<div>");
-            forecastHeader.attr("class", "card-header");
-           
-            var date = moment(`${myForecast[i].date}`).format("MM-DD-YYYY");
-            forecastHeader.text(date);
-            forecastCard.append(forecastHeader);
-
-            var forecastBody = $("<div>");
-            forecastBody.attr("class", "card-body");
-            forecastCard.append(forecastBody);
-
-            //Temp
-            var pTemp = $("<p>").text('Temperature: ' + myForecast[i].temp + ' °F');
-            forecastBody.append(pTemp);
-            //Feels Like
-            var pFeel = $("<p>").text('Feels Like: ' + myForecast[i].feels_like + ' °F');
-            forecastBody.append(pFeel);
-            //Humidity
-            var pHumid = $("<p>").text('Humidity: ' + myForecast[i].humidity + ' %');
-            forecastBody.append(pHumid);
+        } else {
+            return
         }
     });
-}
+    console.log(myForecast.length)
+
+    //populate each forecast card
+    for (var i = 0; i < myForecast.length; i++) {
+        var forecastCard = $("<div>");
+        forecastCard.attr("class", "card text-white mb-3 bg-primary");
+        forecastCard.attr("style", "max-width: 200px;");
+        forecastCard.attr("style", "margin: 5px;");
+        fiveDayForecast.append(forecastCard);
+
+        var forecastHeader = $("<div>");
+        forecastHeader.attr("class", "card-header");
+
+        var date = moment(`${myForecast[i].date}`).format("MM-DD-YYYY");
+        forecastHeader.text(date);
+        forecastCard.append(forecastHeader);
+
+        var forecastBody = $("<div>");
+        forecastBody.attr("class", "card-body");
+        forecastCard.append(forecastBody);
+
+        //Temp
+        var pTemp = $("<p>").text('Temperature: ' + myForecast[i].temp + ' °F');
+        forecastBody.append(pTemp);
+        //Feels Like
+        var pFeel = $("<p>").text('Feels Like: ' + myForecast[i].feels_like + ' °F');
+        forecastBody.append(pFeel);
+        //Humidity
+        var pHumid = $("<p>").text('Humidity: ' + myForecast[i].humidity + ' %');
+        forecastBody.append(pHumid);
+    }
+
+};
 
 
 
@@ -215,7 +221,7 @@ function getWeather(city) {
 
 
 
-$('#historyBtn').on("click", function(event) {
+$('#historyBtn').on("click", function (event) {
     console.log("search history button pressed")
     event.preventDefault();
     city = $(this).text();
