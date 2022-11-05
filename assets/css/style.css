@@ -62,7 +62,8 @@
     margin-top: 10px;
 }
 
-.btn {
+.btn,
+li {
     font-size: 1.3rem;
     text-decoration: none;
     padding: 6px 5px;
@@ -78,7 +79,8 @@
     transform: translate(-1px, -1px);
   }
 
-  .btn:hover {
+  .btn:hover,
+  li:hover {
     color: var(--textColor);
     background-color: var(--buttonHover);
     transform: translate(0, 0);

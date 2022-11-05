@@ -73,7 +73,6 @@ function renderHistory() {
         var li = $("<li>").text(location); // adds a list item with locations name
         li.attr('type', 'button');  // makes the created list item a button
         li.attr('id', 'historyBtn')
-        li.attr('class', 'Btn')
         $('#searchHistory').prepend(li);
     };
 
