@@ -64,19 +64,12 @@ function renderHistory() {
         li.attr('class', 'Btn')
         $('#searchHistory').prepend(li);
 
-    } if (location) {
 
-        // run get Weather function on created button in search history on selected location
-
-    } else {
-        return
     };
 }
 
 
 // create new element to display each search history
-
-
 function renderWeather(weather) {
     var weatherResults = $('#currentSearch');
     $('#currentSearch').empty(); // clears previous search before displaying new search
@@ -109,17 +102,28 @@ function renderWeather(weather) {
         var description = document.createElement("p");
         description.textContent = weatherDetails.description;
         weatherResults.append(description);
+    
+    
+    var title = document.createElement("h2");
+    title.textContent = "Your 5 Day Forecast for: " + weather.name;
+    weatherResults.append(title);
     }
+    
+   
 }
 
 function renderFiveDayForecast(forecast) {
     console.log(forecast)
     var myForecast = [];
     var fiveDayArray = forecast.list;
+    
     var fiveDayForecast = $('#fiveDayForecast');
     $('#fiveDayForecast').empty();
     console.log(fiveDayArray)
     // create 5 day forecast cards
+
+
+
 
     $.each(fiveDayArray, function (index, value) {
 
@@ -133,13 +137,10 @@ function renderFiveDayForecast(forecast) {
 
         if (value.dt_txt.split(" ")[1] === "12:00:00") { // only takes noon temp to push into stock card
             myForecast.push(stock);
-
-            console.log(myForecast);
         } else {
             return
         }
     });
-    console.log(myForecast.length)
 
     //populate each forecast card
     for (var i = 0; i < myForecast.length; i++) {
