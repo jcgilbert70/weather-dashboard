@@ -1,4 +1,5 @@
 var locations = [];
+var unique = [];
 var city = "chicago"
 var date = moment().format("dddd, MMMM Do YYYY");
 var key = "c4a9e8715d261e0f1a0290347bef37d8";
@@ -14,14 +15,15 @@ function init() {
     }
 
 
-    renderHistory();
+    removeDuplicates();
 }
 
 
 $("#submitBtn").on("click", function (event) {
     console.log("get the weather button clicked")
+    $('#cityInput').empty();
     event.preventDefault();
-
+    
     var searchedCity = $("#cityInput").val().toUpperCase().trim(); //grabs the text input saves it in all uppercase characters
 
     if (searchedCity === "") {
@@ -32,7 +34,6 @@ $("#submitBtn").on("click", function (event) {
 
     // currently saving duplicates, look into stopping that
     locations.push(searchedCity);
-
 
     storedHistory();
     getWeather(searchedCity);
@@ -45,28 +46,42 @@ function storedHistory() {
     console.log("stored history function started")
     localStorage.setItem("locations", JSON.stringify(locations))
     console.log("list of all inputs in local storage: " + locations.join(", "))
+    removeDuplicates();
+}
+
+
+function removeDuplicates() {
+    console.log("remove duplicates from history function started")
+    console.log(locations)
+    for (i = 0; i < locations.length; i++) {
+        if (unique.indexOf(locations[i]) === -1) {
+            unique.push(locations[i]);
+        }
+    }
     renderHistory();
 }
+
 
 
 // display cities previously searched under seach history heading, pull from local storage
 function renderHistory() {
     console.log("render history function started")
-
     $('#searchHistory').empty(); // clears the search history list to re-write with now-stored data
-
-    for (var i = 0; i < locations.length; i++) {
-        var location = locations[i];
+    
+    for (var i = 0; i < unique.length; i++) {
+        var location = unique[i];
+        
 
         var li = $("<li>").text(location); // adds a list item with locations name
         li.attr('type', 'button');  // makes the created list item a button
         li.attr('id', 'historyBtn')
         li.attr('class', 'Btn')
         $('#searchHistory').prepend(li);
-
-
     };
+
+
 }
+
 
 
 // create new element to display each search history
@@ -102,21 +117,21 @@ function renderWeather(weather) {
         var description = document.createElement("p");
         description.textContent = weatherDetails.description;
         weatherResults.append(description);
-    
-    
-    var title = document.createElement("h2");
-    title.textContent = "Your 5 Day Forecast for: " + weather.name;
-    weatherResults.append(title);
+
+
+        var title = document.createElement("h2");
+        title.textContent = "Your 5 Day Forecast for: " + weather.name;
+        weatherResults.append(title);
     }
-    
-   
+
+
 }
 
 function renderFiveDayForecast(forecast) {
     console.log(forecast)
     var myForecast = [];
     var fiveDayArray = forecast.list;
-    
+
     var fiveDayForecast = $('#fiveDayForecast');
     $('#fiveDayForecast').empty();
     console.log(fiveDayArray)
