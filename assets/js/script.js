@@ -16,7 +16,6 @@ function init() {
     removeDuplicates(); // starts function to display local storage history, but runs function to remove duplicates first
 }
 
-
 $("#submitBtn").on("click", function (event) {
     console.log("get the weather button clicked")
     event.preventDefault();
@@ -30,14 +29,11 @@ $("#submitBtn").on("click", function (event) {
     console.log("searched city is: " + searchedCity);
     locations.push(searchedCity);
 
-
-
     storedHistory();
     getWeather(searchedCity);
     getFiveDayForecast(searchedCity);
 
 });
-
 
 // store searched history in local storage
 function storedHistory() {
@@ -46,7 +42,6 @@ function storedHistory() {
     console.log("list of all inputs in local storage: " + locations.join(", "))
     removeDuplicates();
 }
-
 
 function removeDuplicates() {
     console.log("remove duplicates from history function started")
@@ -58,8 +53,6 @@ function removeDuplicates() {
     }
     renderHistory();
 }
-
-
 
 // display cities previously searched under seach history heading, pull from local storage
 function renderHistory() {
@@ -87,16 +80,12 @@ function renderHistory() {
     });
 }
 
-
-
 // create new element to display each search history
 function renderWeather(weather) {
     var weatherResults = $('#currentSearch');
     $('#currentSearch').empty(); // clears previous search before displaying new search
 
     console.log(weather);
-
-
 
     // create h2 for name
     var cityName = document.createElement("h2");
@@ -123,13 +112,10 @@ function renderWeather(weather) {
         description.textContent = weatherDetails.description;
         weatherResults.append(description);
 
-
         var title = document.createElement("h2");
         title.textContent = "Your 5 Day Forecast for: " + weather.name;
         weatherResults.append(title);
     }
-
-
 }
 
 function renderFiveDayForecast(forecast) {
@@ -141,11 +127,8 @@ function renderFiveDayForecast(forecast) {
     $('#fiveDayForecast').empty();
     console.log("data from five day forecast fetch next line")
     console.log(fiveDayArray)
+
     // create 5 day forecast cards
-
-
-
-
     $.each(fiveDayArray, function (index, value) {
 
         stock = {
@@ -191,10 +174,7 @@ function renderFiveDayForecast(forecast) {
         var pHumid = $("<p>").text('Humidity: ' + myForecast[i].humidity + ' %');
         forecastBody.append(pHumid);
     }
-
 };
-
-
 
 function locateFiveDayForecast(coordinates) {
     console.log("beginning five day forecast location function")
@@ -212,8 +192,6 @@ function locateFiveDayForecast(coordinates) {
         .then((data) => renderFiveDayForecast(data))
 }
 
-
-
 function getFiveDayForecast(city) {
     console.log("get five day forecast function started")
     console.log("the city that get five day forecast function is fetching: " + city)
@@ -225,14 +203,10 @@ function getFiveDayForecast(city) {
         .then((data) => locateFiveDayForecast(data))
 }
 
-
-
 // have function run on form submit
 function getWeather(city) {
     console.log("get weather function started")
     console.log("the city that get weather function is fetching: " + city)
-
-
 
     var fetchWeather = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=' + key;
 
@@ -240,9 +214,5 @@ function getWeather(city) {
         .then((response) => response.json())
         .then((data) => renderWeather(data))
 }
-
-
-
-
 
 init()
