@@ -34,13 +34,10 @@ $("#submitBtn").on("click", function (event) {
     locations.push(searchedCity);
 
 
-
     storedHistory();
     getWeather(searchedCity);
-    getFiveDayForecast (searchedCity);
+    getFiveDayForecast(searchedCity);
 });
-
-
 
 
 // store searched history in local storage
@@ -50,10 +47,6 @@ function storedHistory() {
     console.log("list of all inputs in local storage: " + locations.join(", "))
     renderHistory();
 }
-
-
-
-
 
 
 // display cities previously searched under seach history heading, pull from local storage
@@ -67,11 +60,13 @@ function renderHistory() {
 
         var li = $("<li>").text(location); // adds a list item with locations name
         li.attr('type', 'button');  // makes the created list item a button
+        li.attr('id', 'historyBtn')
+        li.attr('class', 'Btn')
         $('#searchHistory').prepend(li);
 
     } if (location) {
-        
-         // run get Weather function on created button in search history on selected location
+
+        // run get Weather function on created button in search history on selected location
 
     } else {
         return
@@ -79,16 +74,16 @@ function renderHistory() {
 }
 
 
-
 // create new element to display each search history
 
 
 function renderWeather(weather) {
+    var weatherResults = $('#currentSearch');
     $('#currentSearch').empty(); // clears previous search before displaying new search
 
     console.log(weather);
 
-    var weatherResults = $('#currentSearch');
+
 
     // create h2 for name
     var cityName = document.createElement("h2");
@@ -115,9 +110,92 @@ function renderWeather(weather) {
         description.textContent = weatherDetails.description;
         weatherResults.append(description);
     }
-    
 }
 
+function renderFiveDayForecast(forecast) {
+    console.log(forecast)
+    var fiveDayArray = forecast.list;
+    var myForecast = [];
+    var fiveDayForecast = $('#fiveDayForecast');
+    $('#fiveDayForecast').empty();
+    console.log(fiveDayArray)
+    // create 5 day forecast cards
+
+    $.each(fiveDayArray, function (index, value) {
+        
+        stock = {
+            date: value.dt_txt.split(" ")[0],
+            temp: value.main.temp,
+            feels_like: value.main.feels_like,
+            humidity: value.main.humidity
+        };
+
+        if (value.dt_txt.split(" ")[1] === "12:00:00") { // only takes noon temp to push into stock card
+            myForecast.push(stock);
+            
+            console.log(myForecast);
+        }
+
+        //populate each forecast card
+        for (let i = 0; i < myForecast.length; i++) {
+            var forecastCard = $("<div>");
+            forecastCard.attr("class", "card text-white bg-primary mb-3 cardOne");
+            forecastCard.attr("style", "max-width: 200px;");
+            fiveDayForecast.append(forecastCard);
+
+            var forecastHeader = $("<div>");
+            forecastHeader.attr("class", "card-header");
+           
+            var date = moment(`${myForecast[i].date}`).format("MM-DD-YYYY");
+            forecastHeader.text(date);
+            forecastCard.append(forecastHeader);
+
+            var forecastBody = $("<div>");
+            forecastBody.attr("class", "card-body");
+            forecastCard.append(forecastBody);
+
+            //Temp
+            var pTemp = $("<p>").text('Temperature: ' + myForecast[i].temp + ' °F');
+            forecastBody.append(pTemp);
+            //Feels Like
+            var pFeel = $("<p>").text('Feels Like: ' + myForecast[i].feels_like + ' °F');
+            forecastBody.append(pFeel);
+            //Humidity
+            var pHumid = $("<p>").text('Humidity: ' + myForecast[i].humidity + ' %');
+            forecastBody.append(pHumid);
+        }
+    });
+}
+
+
+
+function locateFiveDayForecast(coordinates) {
+    console.log("beginning five day forecast rendering function")
+    console.log(coordinates);
+
+    var cityLat = coordinates[0].lat;
+    var cityLon = coordinates[0].lon;
+
+    console.log("city latitude is: " + cityLat);
+    console.log("city longitude is: " + cityLon);
+
+    var forecast = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + cityLat + '&lon=' + cityLon + '&units=imperial&appid=' + key;
+    fetch(forecast)
+        .then((response) => response.json())
+        .then((data) => renderFiveDayForecast(data))
+}
+
+
+
+function getFiveDayForecast(city) {
+    console.log("get five day forecast function started")
+
+    var fetchFiveDayForecast = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=1&units=imperial&appid=' + key;
+
+    fetch(fetchFiveDayForecast)
+        .then((response) => response.json())
+        .then((data) => locateFiveDayForecast(data))
+}
 
 
 
@@ -126,155 +204,24 @@ function getWeather(city) {
     console.log("get weather function started")
     console.log("city that get weather function is fetching: " + city)
 
-    
+
 
     var fetchWeather = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=' + key;
 
     fetch(fetchWeather)
         .then((response) => response.json())
         .then((data) => renderWeather(data))
-
 }
 
 
 
-
-function getFiveDayForecast (city) {
-    console.log("get five day forecast function started")
-
-var fetchFiveDayForecast = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=1&appid=' + key;
-
-fetch(fetchFiveDayForecast)
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-
-
-}
-
-/* 
- var currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${key}`;
- 
- 
- 
- 
- $(".currentSearch").empty();
- 
- 
- 
- $.ajax({
-     url: currentWeatherApi,
-     method: "GET"
- 
- }).then(function (response) {
-     $(".searhedCityName").text(response.name);
-     $(".searchedCurrentDate").text(date);
-     $(".icons").attr("src", `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`);
- 
-     var currentTemperatureEl = $('<p>').text(`Feels Like: ${response.main.feels_like} °F`);
-     currentSearch.append(currentTemperatureEl);
- 
-     var currentFeelsLikeTemperatureEl = $("<p>").text(`Feels Like: ${response.main.feels_like} °F`);
-     currentSearch.append(currentFeelsLikeTemperatureEl);
- 
-     var currentHumidityEl = $("<p>").text(`Humidity: ${response.main.humidity} %`);
-     currentSearch.append(currentHumidityEl);
- 
- 
- 
- 
-     var searchLon = response.coord.lon;
-     console.log(searchLon);
-     var searchLat = response.coord.lat;
-     console.log(searchLat);
- 
- 
- 
- })
- // getFiveDayForecast();
-}
-*/
-
-
-
-/*
-function getFiveDayForecast() {
-    var fiveDayForecastApi = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${key}`;
- 
-    $.ajax({
-        url: fiveDayForecastApi,
-        method: "GET"
- 
-    }).then(function (response) {
- 
-        $("#fiveDayForecast").empty();
-        console.log(response);
-        for (var i = 0, j = 0; j <= 5; i = i + 6) {
-            var eachDate = response.list[i].dt;
-            if (response.list[i].dt != response.list[i + 1].dt) {
-                var FivedayDiv = $("<div>");
-                FivedayDiv.attr("class", "col-3 m-2 bg-primary");
-                var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
-                d.setUTCSeconds(eachDate);
-                var date = d;
-                console.log(date);
-                var month = date.getMonth() + 1;
-                var day = date.getDate();
-                var dayOutput =
-                    date.getFullYear() +
-                    "/" +
-                    (month < 10 ? "0" : "") +
-                    month +
-                    "/" +
-                    (day < 10 ? "0" : "") +
-                    day;
-                var Fivedayh4 = $("<h6>").text(dayOutput);
-                //Set src to the imags
-                var imgtag = $("<img>");
-                var skyconditions = response5day.list[i].weather[0].main;
-                if (skyconditions === "Clouds") {
-                    imgtag.attr(
-                        "src",
-                        "https://img.icons8.com/color/48/000000/cloud.png"
-                    );
-                } else if (skyconditions === "Clear") {
-                    imgtag.attr(
-                        "src",
-                        "https://img.icons8.com/color/48/000000/summer.png"
-                    );
-                } else if (skyconditions === "Rain") {
-                    imgtag.attr(
-                        "src",
-                        "https://img.icons8.com/color/48/000000/rain.png"
-                    );
-                }
- 
-                var pTemperatureK = response5day.list[i].main.temp;
-                console.log(skyconditions);
-                var TempetureToNum = parseInt((pTemperatureK * 9) / 5 - 459);
-                var pTemperature = $("<p>").text(
-                    "Tempeture: " + TempetureToNum + " °F"
-                );
-                var pHumidity = $("<p>").text(
-                    "Humidity: " + response5day.list[i].main.humidity + " %"
-                );
-                FivedayDiv.append(Fivedayh4);
-                FivedayDiv.append(imgtag);
-                FivedayDiv.append(pTemperature);
-                FivedayDiv.append(pHumidity);
-                $("#boxes").append(FivedayDiv);
-                console.log(response5day);
-                j++;
-            }
-        }
-    });
- 
-}
-*/
-
-
-
-
-
-// will need button click function for created location history buttons
+$('#historyBtn').on("click", function(event) {
+    console.log("search history button pressed")
+    event.preventDefault();
+    city = $(this).text();
+    console.log(city)
+    getWeather(city);
+    getFiveDayForecast(city);
+});
 
 init()

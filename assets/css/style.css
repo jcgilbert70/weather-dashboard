@@ -31,12 +31,12 @@
     display: inline-block;
     border-radius: var(--border-radius);
     box-shadow: 6px 5px var(--shadow);
+    margin-right: ;
 }
 
 .titleDescription {
     color: var(--textColor);
     font-size: 1.2rem;
-    
 }
 
 .mainStyle {
