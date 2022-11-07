@@ -133,11 +133,12 @@ function renderFiveDayForecast(forecast) {
 
         stock = {
             date: value.dt_txt,
+            icon: value.weather[0].icon,
             temp: value.main.temp,
             feels_like: value.main.feels_like,
             humidity: value.main.humidity
         };
-
+        
         if (value.dt_txt.split(" ")[1] === "12:00:00") { // only takes noon temp to push into stock card
             myForecast.push(stock);
         } else {
@@ -146,24 +147,28 @@ function renderFiveDayForecast(forecast) {
     });
 
     //populate each forecast card
-    for (var i = 0; i < myForecast.length; i++) {
+    for (var i = 0; i < myForecast.length; i++) { // create the cards with syling
         var forecastCard = $("<div>");
         forecastCard.attr("class", "card text-white mb-3 bg-primary");
         forecastCard.attr("style", "max-width: 200px;");
         forecastCard.attr("style", "margin: 5px;");
         fiveDayForecast.append(forecastCard);
 
-        var forecastHeader = $("<div>");
+        var forecastHeader = $("<div>"); // create teh header with styling
         forecastHeader.attr("class", "card-header");
 
-        var date = moment(`${myForecast[i].date}`).format("MM-DD-YYYY");
+        var date = moment(`${myForecast[i].date}`).format("MM-DD-YYYY"); // add date with moment format
         forecastHeader.text(date);
         forecastCard.append(forecastHeader);
 
-        var forecastBody = $("<div>");
+        var forecastBody = $("<div>"); // the body of the cards with styling, add and append icon, temp, feel, and humidity
         forecastBody.attr("class", "card-body");
         forecastCard.append(forecastBody);
 
+        //Icon
+        var icon = $("<img>").val(myForecast[i].icon);
+        forecastBody.append(icon);
+        console.log(icon)
         //Temp
         var pTemp = $("<p>").text('Temperature: ' + myForecast[i].temp + ' °F');
         forecastBody.append(pTemp);
