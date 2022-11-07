@@ -85,12 +85,15 @@ function renderWeather(weather) {
     var weatherResults = $('#currentSearch');
     $('#currentSearch').empty(); // clears previous search before displaying new search
 
-    console.log(weather);
-
     // create h2 for name
     var cityName = document.createElement("h2");
     cityName.textContent = weather.name;
     weatherResults.append(cityName);
+
+    // create img for weather icon
+    var icon = $("<img>").val(weather.weather[0].icon);
+    icon.attr("src", `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`);
+    weatherResults.append(icon)
 
     // create p for temp
     var temp = document.createElement("p");
@@ -138,7 +141,7 @@ function renderFiveDayForecast(forecast) {
             feels_like: value.main.feels_like,
             humidity: value.main.humidity
         };
-        
+
         if (value.dt_txt.split(" ")[1] === "12:00:00") { // only takes noon temp to push into stock card
             myForecast.push(stock);
         } else {
@@ -150,7 +153,7 @@ function renderFiveDayForecast(forecast) {
     for (var i = 0; i < myForecast.length; i++) { // create the cards with syling
         var forecastCard = $("<div>");
         forecastCard.attr("class", "card text-white mb-3 bg-primary");
-        forecastCard.attr("style", "max-width: 200px;");
+        forecastCard.attr("style", "max-width: 280px;");
         forecastCard.attr("style", "margin: 5px;");
         fiveDayForecast.append(forecastCard);
 
@@ -165,8 +168,10 @@ function renderFiveDayForecast(forecast) {
         forecastBody.attr("class", "card-body");
         forecastCard.append(forecastBody);
 
+        console.log(myForecast[i].icon)
         //Icon
         var icon = $("<img>").val(myForecast[i].icon);
+        icon.attr("src", `https://openweathermap.org/img/wn/${myForecast[i].icon}@2x.png`);
         forecastBody.append(icon);
         console.log(icon)
         //Temp
