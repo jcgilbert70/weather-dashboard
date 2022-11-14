@@ -13,7 +13,7 @@ function init() {
         locations = storedLocations;
         console.log("all locations in local storage: " + locations)
     }
-    removeDuplicates(); // starts function to display local storage history, but runs function to remove duplicates first
+    removeDuplicates(); // removing duplicate locations before rendering the locations in the search history
 }
 
 $("#submitBtn").on("click", function (event) {
@@ -38,7 +38,7 @@ $("#submitBtn").on("click", function (event) {
 // store searched history in local storage
 function storedHistory() {
     console.log("stored history function started")
-    localStorage.setItem("locations", JSON.stringify(locations))
+    localStorage.setItem("locations", JSON.stringify(locations)) //added all searched names into locations array
     console.log("list of all inputs in local storage: " + locations.join(", "))
     removeDuplicates();
 }
@@ -65,13 +65,10 @@ function renderHistory() {
 
         var li = $("<li>").text(location); // adds a list item with locations name
         li.attr('type', 'button');  // makes the created list item a button
-        li.attr('id', 'historyBtn')
+        li.attr('id', 'historyBtn');
         $('#searchHistory').prepend(li);
     };
 
-    //$('#historyBtn').on("click", function (event) {
-    //console.log("search history button pressed")
-    //event.preventDefault();
     $(document).on("click", "#historyBtn", function (event) {
         event.preventDefault();
         city = $(this).text();
@@ -167,8 +164,8 @@ function renderFiveDayForecast(forecast) {
         var forecastBody = $("<div>"); // the body of the cards with styling, add and append icon, temp, feel, and humidity
         forecastBody.attr("class", "card-body");
         forecastCard.append(forecastBody);
-
         console.log(myForecast[i].icon)
+
         //Icon
         var icon = $("<img>").val(myForecast[i].icon);
         icon.attr("src", `https://openweathermap.org/img/wn/${myForecast[i].icon}@2x.png`);
@@ -206,7 +203,7 @@ function getFiveDayForecast(city) {
     console.log("get five day forecast function started")
     console.log("the city that get five day forecast function is fetching: " + city)
 
-    var fetchFiveDayForecast = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=1&units=imperial&appid=' + key;
+    var fetchFiveDayForecast = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=1&appid=' + key;
 
     fetch(fetchFiveDayForecast)
         .then((response) => response.json())
