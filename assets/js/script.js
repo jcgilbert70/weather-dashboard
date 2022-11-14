@@ -203,7 +203,7 @@ function getFiveDayForecast(city) {
     console.log("get five day forecast function started")
     console.log("the city that get five day forecast function is fetching: " + city)
 
-    var fetchFiveDayForecast = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=1&appid=' + key;
+    var fetchFiveDayForecast = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=1&appid=' + key;
 
     fetch(fetchFiveDayForecast)
         .then((response) => response.json())
